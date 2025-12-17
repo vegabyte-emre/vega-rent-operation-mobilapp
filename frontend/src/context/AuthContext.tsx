@@ -55,8 +55,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const loadStoredAuth = async () => {
     try {
-      const storedToken = await SecureStore.getItemAsync('auth_token');
-      const storedUser = await SecureStore.getItemAsync('user_data');
+      const storedToken = await storage.getItem('auth_token');
+      const storedUser = await storage.getItem('user_data');
       
       if (storedToken && storedUser) {
         setToken(storedToken);
@@ -73,16 +73,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const response = await authService.login(email, password);
     const { access_token, user: userData } = response;
     
-    await SecureStore.setItemAsync('auth_token', access_token);
-    await SecureStore.setItemAsync('user_data', JSON.stringify(userData));
+    await storage.setItem('auth_token', access_token);
+    await storage.setItem('user_data', JSON.stringify(userData));
     
     setToken(access_token);
     setUser(userData);
   };
 
   const logout = async () => {
-    await SecureStore.deleteItemAsync('auth_token');
-    await SecureStore.deleteItemAsync('user_data');
+    await storage.deleteItem('auth_token');
+    await storage.deleteItem('user_data');
     setToken(null);
     setUser(null);
   };
