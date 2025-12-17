@@ -1,7 +1,25 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 const API_BASE_URL = 'https://fleetease-1.preview.emergentagent.com/api';
+
+// Platform-specific storage helper
+const storage = {
+  getItem: async (key: string) => {
+    if (Platform.OS === 'web') {
+      return await AsyncStorage.getItem(key);
+    }
+    return await SecureStore.getItemAsync(key);
+  },
+  deleteItem: async (key: string) => {
+    if (Platform.OS === 'web') {
+      return await AsyncStorage.removeItem(key);
+    }
+    return await SecureStore.deleteItemAsync(key);
+  },
+};
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -13,7 +31,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   async (config) => {
-    const token = await SecureStore.getItemAsync('auth_token');
+    const token = await storage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +48,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired, handle logout
-      SecureStore.deleteItemAsync('auth_token');
+      storage.deleteItem('auth_token');
     }
     return Promise.reject(error);
   }
