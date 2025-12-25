@@ -24,7 +24,7 @@ module.exports = ({ config }) => {
         backgroundColor: '#0F172A',
       },
       package: process.env.PACKAGE_NAME || 'com.vegarent.operation',
-      edgeToEdgeEnabled: true,
+      // edgeToEdgeEnabled: false - disabled to prevent tab bar going behind navigation buttons
     },
     web: {
       bundler: 'metro',
