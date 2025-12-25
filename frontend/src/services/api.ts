@@ -2,12 +2,9 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import Constants from 'expo-constants';
 
-// Use environment variable or fallback to local API
-const API_BASE_URL = Constants.expoConfig?.extra?.API_URL || 
-                     process.env.EXPO_PUBLIC_BACKEND_URL || 
-                     'https://car-rental-staff.preview.emergentagent.com/api';
+// Local backend API - always use this
+const API_BASE_URL = 'https://car-rental-staff.preview.emergentagent.com/api';
 
 console.log('API URL:', API_BASE_URL);
 
