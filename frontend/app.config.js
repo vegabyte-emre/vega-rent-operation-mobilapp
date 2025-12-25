@@ -10,7 +10,7 @@ module.exports = ({ config }) => {
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
     splash: {
-      image: './assets/images/splash-icon.png',
+      image: './assets/images/splash-image.png',
       resizeMode: 'contain',
       backgroundColor: '#0F172A',
     },
