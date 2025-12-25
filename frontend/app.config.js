@@ -67,7 +67,7 @@ module.exports = ({ config }) => {
       typedRoutes: true,
     },
     extra: {
-      API_URL: process.env.API_URL || 'https://fleetease-1.preview.emergentagent.com/api',
+      API_URL: process.env.API_URL || 'https://car-rental-staff.preview.emergentagent.com/api',
       COMPANY_NAME: process.env.COMPANY_NAME || 'Vega Operasyon',
       eas: {
         projectId: 'af4db31d-9d07-4872-9649-6743df13ba1e',
