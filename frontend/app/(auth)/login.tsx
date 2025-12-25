@@ -205,6 +205,7 @@ export default function LoginScreen() {
                 style={styles.loginButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
+                pointerEvents="none"
               >
                 {isLoading ? (
                   <ActivityIndicator color="#fff" />
