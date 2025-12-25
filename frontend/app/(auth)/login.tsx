@@ -191,8 +191,12 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+            <Pressable
+              style={({ pressed }) => [
+                styles.loginButton, 
+                isLoading && styles.loginButtonDisabled,
+                pressed && { opacity: 0.8 }
+              ]}
               onPress={handleLogin}
               disabled={isLoading}
             >
@@ -211,7 +215,7 @@ export default function LoginScreen() {
                   </>
                 )}
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Demo Info */}
