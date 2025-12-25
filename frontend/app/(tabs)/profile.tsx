@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/context/AuthContext';
 import { COLORS, SIZES, SHADOWS } from '../../src/constants/theme';
 
@@ -40,66 +41,93 @@ export default function ProfileScreen() {
       icon: 'person-outline',
       title: 'Profil Bilgileri',
       subtitle: 'Kişisel bilgilerinizi görüntüleyin',
+      color: COLORS.primary,
       onPress: () => {},
     },
     {
       icon: 'notifications-outline',
       title: 'Bildirimler',
       subtitle: 'Bildirim tercihlerinizi yönetin',
+      color: COLORS.info,
       onPress: () => {},
     },
     {
-      icon: 'shield-outline',
+      icon: 'shield-checkmark-outline',
       title: 'Güvenlik',
       subtitle: 'Şifre ve güvenlik ayarları',
+      color: COLORS.success,
       onPress: () => {},
     },
     {
       icon: 'help-circle-outline',
       title: 'Yardım & Destek',
       subtitle: 'SSS ve destek',
+      color: COLORS.warning,
       onPress: () => {},
     },
     {
       icon: 'information-circle-outline',
       title: 'Hakkında',
       subtitle: 'Uygulama bilgileri',
+      color: COLORS.secondary,
       onPress: () => {},
     },
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Profil</Text>
-        </View>
-
-        {/* User Info Card */}
-        <View style={styles.userCard}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.full_name?.split(' ').map((n) => n[0]).join('').toUpperCase()}
-            </Text>
+        <LinearGradient
+          colors={[COLORS.gradientStart, COLORS.gradientEnd]}
+          style={styles.header}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.avatarContainer}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {user?.full_name?.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
+              </Text>
+            </View>
+            <View style={styles.onlineIndicator} />
           </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.full_name}</Text>
-            <Text style={styles.userRole}>
+          <Text style={styles.userName}>{user?.full_name}</Text>
+          <View style={styles.roleBadge}>
+            <Ionicons name="shield-checkmark" size={14} color="#fff" />
+            <Text style={styles.roleText}>
               {user?.role === 'superadmin' ? 'Süper Admin' : user?.role}
             </Text>
-            <View style={styles.userDetails}>
-              <View style={styles.detailRow}>
-                <Ionicons name="mail-outline" size={14} color={COLORS.textLight} />
-                <Text style={styles.detailText}>{user?.email}</Text>
-              </View>
-              {user?.phone && (
-                <View style={styles.detailRow}>
-                  <Ionicons name="call-outline" size={14} color={COLORS.textLight} />
-                  <Text style={styles.detailText}>{user.phone}</Text>
-                </View>
-              )}
+          </View>
+          <View style={styles.contactInfo}>
+            <View style={styles.contactItem}>
+              <Ionicons name="mail" size={16} color="rgba(255,255,255,0.8)" />
+              <Text style={styles.contactText}>{user?.email}</Text>
             </View>
+            {user?.phone && (
+              <View style={styles.contactItem}>
+                <Ionicons name="call" size={16} color="rgba(255,255,255,0.8)" />
+                <Text style={styles.contactText}>{user.phone}</Text>
+              </View>
+            )}
+          </View>
+        </LinearGradient>
+
+        {/* Stats */}
+        <View style={styles.statsCard}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>156</Text>
+            <Text style={styles.statLabel}>Teslim</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>142</Text>
+            <Text style={styles.statLabel}>İade</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>98%</Text>
+            <Text style={styles.statLabel}>Başarı</Text>
           </View>
         </View>
 
@@ -111,8 +139,8 @@ export default function ProfileScreen() {
               style={styles.menuItem}
               onPress={item.onPress}
             >
-              <View style={styles.menuIcon}>
-                <Ionicons name={item.icon as any} size={22} color={COLORS.primary} />
+              <View style={[styles.menuIcon, { backgroundColor: item.color + '15' }]}>
+                <Ionicons name={item.icon as any} size={22} color={item.color} />
               </View>
               <View style={styles.menuContent}>
                 <Text style={styles.menuTitle}>{item.title}</Text>
@@ -130,7 +158,10 @@ export default function ProfileScreen() {
         </TouchableOpacity>
 
         {/* Version */}
-        <Text style={styles.version}>FleetEase Personel v1.0.0</Text>
+        <View style={styles.versionContainer}>
+          <Text style={styles.versionText}>Vega Operasyon v1.0.0</Text>
+          <Text style={styles.companyText}>Vega Rent A Car © 2024</Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -142,68 +173,111 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   scrollContent: {
-    padding: SIZES.md,
+    paddingBottom: SIZES.xl,
   },
   header: {
-    marginBottom: SIZES.lg,
+    alignItems: 'center',
+    paddingVertical: SIZES.xl,
+    paddingHorizontal: SIZES.md,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: COLORS.text,
-  },
-  userCard: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.surface,
-    borderRadius: SIZES.radiusLg,
-    padding: SIZES.lg,
-    marginBottom: SIZES.lg,
-    ...SHADOWS.md,
+  avatarContainer: {
+    position: 'relative',
+    marginBottom: SIZES.sm,
   },
   avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: COLORS.primary,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: SIZES.md,
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   avatarText: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: '700',
     color: '#fff',
   },
-  userInfo: {
-    flex: 1,
-    justifyContent: 'center',
+  onlineIndicator: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: COLORS.success,
+    borderWidth: 3,
+    borderColor: COLORS.primary,
   },
   userName: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: COLORS.text,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#fff',
+    marginTop: SIZES.xs,
   },
-  userRole: {
-    fontSize: 14,
-    color: COLORS.primary,
-    fontWeight: '500',
-    marginTop: 2,
-  },
-  userDetails: {
+  roleBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: SIZES.sm,
+    paddingVertical: 4,
+    borderRadius: SIZES.radiusSm,
     marginTop: SIZES.xs,
     gap: 4,
   },
-  detailRow: {
+  roleText: {
+    fontSize: 13,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  contactInfo: {
+    marginTop: SIZES.md,
+    gap: SIZES.xs,
+  },
+  contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: SIZES.xs,
   },
-  detailText: {
-    fontSize: 13,
+  contactText: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
+  },
+  statsCard: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.surface,
+    marginHorizontal: SIZES.md,
+    marginTop: -24,
+    borderRadius: SIZES.radius,
+    padding: SIZES.lg,
+    ...SHADOWS.md,
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  statLabel: {
+    fontSize: 12,
     color: COLORS.textLight,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    backgroundColor: COLORS.border,
+    marginHorizontal: SIZES.md,
   },
   menuContainer: {
     backgroundColor: COLORS.surface,
+    marginHorizontal: SIZES.md,
+    marginTop: SIZES.lg,
     borderRadius: SIZES.radius,
     overflow: 'hidden',
     ...SHADOWS.sm,
@@ -216,10 +290,9 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.borderLight,
   },
   menuIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: COLORS.primary + '10',
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SIZES.md,
@@ -229,7 +302,7 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
     color: COLORS.text,
   },
   menuSubtitle: {
@@ -242,9 +315,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.danger + '10',
+    marginHorizontal: SIZES.md,
     padding: SIZES.md,
     borderRadius: SIZES.radius,
-    marginTop: SIZES.xl,
+    marginTop: SIZES.lg,
     gap: SIZES.xs,
   },
   logoutText: {
@@ -252,10 +326,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.danger,
   },
-  version: {
-    textAlign: 'center',
+  versionContainer: {
+    alignItems: 'center',
+    marginTop: SIZES.xl,
+  },
+  versionText: {
+    fontSize: 13,
+    color: COLORS.textMuted,
+  },
+  companyText: {
     fontSize: 12,
     color: COLORS.textMuted,
-    marginTop: SIZES.xl,
+    marginTop: 4,
   },
 });
