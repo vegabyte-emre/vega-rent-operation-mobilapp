@@ -72,8 +72,11 @@ export default function LoginScreen() {
 
     setIsLoading(true);
     try {
+      console.log('Login attempt starting...');
       await login(email.trim(), password);
+      console.log('Login successful, navigating to tabs...');
       router.replace('/(tabs)');
+      console.log('Navigation called');
     } catch (error: any) {
       console.error('Login error:', error);
       Alert.alert(
