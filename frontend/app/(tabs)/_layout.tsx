@@ -2,14 +2,23 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../src/constants/theme';
-import { Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
   
   // Calculate proper bottom padding for tab bar
-  const tabBarHeight = 60;
-  const bottomPadding = Platform.OS === 'android' ? Math.max(insets.bottom, 10) : insets.bottom;
+  // Android navigation bar is typically ~48dp, iOS home indicator ~34pt
+  const tabBarHeight = 56;
+  const androidNavBarHeight = 48; // Standard Android navigation bar height
+  
+  // Use insets.bottom for iOS, add extra padding for Android to account for navigation bar
+  const bottomPadding = Platform.select({
+    ios: Math.max(insets.bottom, 8),
+    android: Math.max(insets.bottom, androidNavBarHeight, 16),
+    default: 8,
+  });
 
   return (
     <Tabs
@@ -23,7 +32,12 @@ export default function TabsLayout() {
           borderTopWidth: 1,
           height: tabBarHeight + bottomPadding,
           paddingBottom: bottomPadding,
-          paddingTop: 8,
+          paddingTop: 6,
+          // Ensure tab bar is above system navigation
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
           elevation: 8,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: -2 },
@@ -31,12 +45,16 @@ export default function TabsLayout() {
           shadowRadius: 8,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 10,
           fontWeight: '600',
-          marginBottom: 2,
+          marginBottom: Platform.OS === 'android' ? 4 : 0,
         },
         tabBarIconStyle: {
-          marginTop: 4,
+          marginTop: 2,
+        },
+        // Add padding to screen content so it doesn't go behind tab bar
+        sceneContainerStyle: {
+          paddingBottom: 0, // Screens should handle their own bottom padding
         },
       }}
     >
