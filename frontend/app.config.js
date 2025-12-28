@@ -24,7 +24,6 @@ module.exports = ({ config }) => {
         backgroundColor: '#0F172A',
       },
       package: process.env.PACKAGE_NAME || 'com.vegarent.operation',
-      // edgeToEdgeEnabled: false - disabled to prevent tab bar going behind navigation buttons
     },
     web: {
       bundler: 'metro',
@@ -67,8 +66,9 @@ module.exports = ({ config }) => {
       typedRoutes: true,
     },
     extra: {
-      API_URL: process.env.API_URL || 'https://car-rental-staff.preview.emergentagent.com/api',
-      COMPANY_NAME: process.env.COMPANY_NAME || 'Vega Operasyon',
+      API_URL: process.env.API_URL || 'http://localhost:8001',
+      COMPANY_NAME: process.env.COMPANY_NAME || 'Rent A Car',
+      COMPANY_CODE: process.env.COMPANY_CODE || 'default',
       eas: {
         projectId: 'af4db31d-9d07-4872-9649-6743df13ba1e',
       },
