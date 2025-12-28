@@ -5,8 +5,8 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 // Get API URL from app.config.js extra field (set during build)
-const API_URL = Constants.expoConfig?.extra?.API_URL || 'https://api.example.com';
-const API_BASE_URL = API_URL + '/api';
+const API_URL = Constants.expoConfig?.extra?.API_URL || 'http://localhost:8001';
+const API_BASE_URL = API_URL.endsWith('/api') ? API_URL : API_URL + '/api';
 
 console.log('API URL:', API_BASE_URL);
 
