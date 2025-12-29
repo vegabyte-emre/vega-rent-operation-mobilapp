@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../../src/constants/version';
 import React from 'react';
 import {
   View,
@@ -159,7 +160,7 @@ export default function ProfileScreen() {
 
         {/* Version */}
         <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>Vega Operasyon v1.0.0</Text>
+          <Text style={styles.versionText}>Vega Operasyon v{APP_VERSION}</Text>
           <Text style={styles.companyText}>Vega Rent A Car © 2024</Text>
         </View>
       </ScrollView>
